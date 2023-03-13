@@ -1,10 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "web_base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
 
-</body>
-</html>
+<!-- Section: Split screen -->
+<section class="">
+
+  <div class="container-fluid px-0">
+    <div class="row g-0 text-center vh-100">
+
+      <!-- First column -->
+      <div class="col-lg-6 vh-80 bg-danger align-self-center">
+        <h3 align="center">Admin Login</h3>
+        <div class="container">
+        <form action="" method="POST">
+            <div class="input-group mb-3">
+                <label for="user_name" class="input-group-text">User Name</label>
+                <input type="text"
+                class="form-control"
+                id="admin_user_name"
+                name="user_name"
+                placeholder="Enter Your user-name"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <label for="pswrd" class="input-group-text">Password</label>
+                <input type="password"
+                class="form-control"
+                id="admin_password"
+                name="password"
+                placeholder="Enter Password"/>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Log in</button>
+        </form>
+      </div>
+
+      </div>
+      <!-- First column -->
+
+
+
+      <!-- Second column -->
+      <div class="col-lg-6 vh-80 bg-secondary align-self-center">
+        <h3 align="center">User Login</h3>
+        <div class="container">
+        <form action="" method="POST">
+
+            <div class="input-group mb-3">
+                <label for="user_user_name" class="input-group-text">User Name</label>
+                <input type="text"
+                class="form-control"
+                id="user_user_name"
+                name="user_name"
+                placeholder="Enter Your user-name"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <label for="user_password" class="input-group-text">Password</label>
+                <input type="password"
+                class="form-control"
+                id="user_password"
+                name="password"
+                placeholder="Enter Password"/>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Log in</button>
+
+            <a href="/sign-up">
+                <button type="button" class="btn btn-outline-primary">Register</button>
+            </a>
+
+        </form>
+        </div>
+
+      </div>
+      <!-- Second column -->
+
+    </div>
+  </div>
+
+</section>
+<!-- Section: Split screen -->
+
+
+
+
+
+
+
+{% endblock %}
