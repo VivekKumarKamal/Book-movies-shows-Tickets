@@ -2,9 +2,71 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<div>
-    <h3>Hello</h3>
-</div>
+
+<section class="">
+
+  <div class="container-fluid px-0">
+    <div class="row g-0 text-center vh-100">
+
+      <div class=" bg-danger align-self-center">
+        <h3 align="center">The Venue</h3>
+          <br>
+        <div class="container">
+        <form action="" method="POST">
+
+            <div class="input-group mb-3">
+                <label for="venue_name" class="input-group-text">Venue Name</label>
+                <input type="text"
+                class="form-control"
+                id="venue_name"
+                name="venue_name"
+                placeholder="Enter the name for venue"
+
+                value="{{ venue_name }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+
+            <div class="input-group mb-3">
+                <label for="place" class="input-group-text">Place</label>
+                <input type="text"
+                class="form-control"
+                id="place"
+                name="place"
+                placeholder="Enter the Place name"
+                value="{{ place }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+
+            <div class="input-group mb-3">
+                <label for="location" class="input-group-text">Location</label>
+                <input type="text"
+                class="form-control"
+                id="location"
+                name="location"
+                placeholder="Enter the name of location"
+                value="{{ location }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+
+            <div class="input-group mb-3">
+                <label for="capacity" class="input-group-text">Capacity</label>
+                <input type="number"
+                class="form-control"
+                id="capacity"
+                name="capacity"
+                placeholder="Enter the audience capacity of the venue"
+                value="{{ capacity }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+            <br>
+            <button type="submit" class="btn btn-primary">Enter</button>
+        </form>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
 
 {% endblock %}

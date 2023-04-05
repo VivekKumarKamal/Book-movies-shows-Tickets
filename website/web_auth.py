@@ -5,7 +5,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 from .web_models import User, Venue, Show, ShowTag, Tags
 
-
 # -----------------------------Blueprint-----------------------------
 web_auth = Blueprint('web_auth', __name__)
 
@@ -17,15 +16,14 @@ def admin_login():
         user_name = request.form.get('user_name')
         password = request.form.get('password')
 
-        admin = User.query.filter_by(user_name=user_name, admin=1).first()
-        if not admin:
+        user = User.query.filter_by(user_name=user_name, admin=1).first()
+        if not user:
             flash("No User found with this User-Name", category='error')
         else:
-            if admin.password == password:
+            if user.password == password:
+                login_user(user)
 
-                login_user(admin)
-
-                return render_template('admin_files/web_admin-dashboard.html')
+                return render_template('admin_files/web_admin-dashboard.html', user=user)
     return render_template("admin_files/web_admin-login.html")
 
 
@@ -42,7 +40,7 @@ def user_login():
             if user.password == password:
                 login_user(user)
 
-                return render_template('user_files/web_user-dashboard.html')
+                return render_template('user_files/web_user-dashboard.html', user=user)
     return render_template("user_files/web_user-login.html")
 
 
@@ -89,3 +87,41 @@ def logout():
     logout_user()
     return redirect(url_for('web_views.home'))
 
+
+
+@web_auth.route('/manage-venue/<int:id>', methods=['GET', 'POST'])
+@login_required
+def manage_venue(id):
+    venue = Venue.query.filter_by(id=id).first()
+    if request.method == "GET":
+        name = venue.name if venue else ""
+        place = venue.place if venue else ""
+        location = venue.location if venue else ""
+        capacity = venue.capacity if venue else ""
+
+        return render_template("admin_files/web_venue-management.html",
+                               user=current_user,
+                               venue_name=name,
+                               place=place,
+                               location=location,
+                               capacity=capacity)
+    else:
+        venue_name = request.form.get('venue_name')
+        place = request.form.get('place')
+        location = request.form.get('location')
+        capacity = request.form.get('capacity')
+
+        if not venue:
+                    new_venue = Venue(id=id, admin_id=current_user.id, name=venue_name, place=place, location=location, capacity=capacity)
+                    db.session.add(new_venue)
+                    db.session.commit()
+
+        else:
+            venue.name = venue_name
+            venue.place = place
+            venue.location = location
+            venue.capacity = capacity
+
+            db.session.commit()
+
+    return redirect(url_for('web_views.home'))

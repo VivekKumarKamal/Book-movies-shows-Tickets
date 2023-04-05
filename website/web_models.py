@@ -12,13 +12,20 @@ class User(db.Model, UserMixin):
     user_name = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20))
     admin = db.Column(db.Integer, default=0)
+
+    venues = db.relationship('Venue')
+
+
+
 class Venue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(25))
     place = db.Column(db.String(35))
+    location = db.Column(db.String(50))
     capacity = db.Column(db.Integer)
 
     shows = db.relationship('Show')
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
