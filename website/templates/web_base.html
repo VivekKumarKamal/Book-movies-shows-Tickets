@@ -25,10 +25,58 @@
 
 
 <body>
+    <header class="navbar navbar-expand-sm navbar-light bg-light">
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <div class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                <a href="/" class="nav-item nav-link navbar-brand me-auto">Ticket Show</a>
+                {% else %}
+                <p class="nav-item navbar-brand me-auto">Ticket Show</p>
+                {% endif %}
+
+                {% if current_user.is_authenticated %}
+
+                <form class="navbar-nav mx-5" method="POST" action="{{ url_for('web_views.search') }}">
+                  <input class="form-control" required name="searched" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
 
 
-    <header class="navbar navbar-expand-sm navbar-light bg-light mb-10">
-        <h3>Ticket Show</h3>
+                <ul class="navbar-nav ms-5">
+                  <li class="nav-item">
+                    <a href="/" class="nav-link" id="home">Home</a>
+                  </li>
+                  {% if current_user.admin == 0 %}
+                      <li class="nav-item">
+                        <a href="/profile/{{ current_user.user_name }}" class="nav-link">Profile</a>
+                      </li>
+
+                        <li class="nav-item">
+                        <a href="/profile/{{ current_user.user_name }}" class="nav-link">Bookings</a>
+                      </li>
+                  {% else %}
+                      <li class="nav-item">
+                        <a href="/profile/{{ current_user.user_name }}" class="nav-link">Summary</a>
+                      </li>
+                  {% endif %}
+
+                  <li class="nav-item">
+                    <a href="/log-out" class="nav-link" id="logout">Log-out</a>
+                  </li>
+
+                  {% endif %}
+
+                </ul>
+            </div>
+        </div>
     </header>
 
     <div class="container">

@@ -1,0 +1,43 @@
+{% extends "web_base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+
+
+<!-- Section: Split screen -->
+<section class="vh-100">
+
+  <div class="container-fluid px-0">
+    <div class="row g-0 text-center vh-100">
+
+      <!-- First column -->
+      <div class="col-lg-6 align-self-center">
+          <h2>Admin</h2>
+          <a href="/admin-login"><button class="btn btn-primary">Login</button></a>
+
+
+      </div>
+      <!-- First column -->
+
+      <!-- Second column -->
+      <div class="col-lg-6 align-self-center">
+          <h2>User</h2>
+
+          <a href="/user-login"><button class="btn btn-primary">Login</button></a>
+          <a href="/sign-up"><button class="btn btn-success">Register</button></a>
+
+      </div>
+      <!-- Second column -->
+
+    </div>
+  </div>
+
+</section>
+<!-- Section: Split screen -->
+
+
+
+
+
+
+{% endblock %}

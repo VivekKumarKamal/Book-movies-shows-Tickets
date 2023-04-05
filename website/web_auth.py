@@ -11,9 +11,40 @@ web_auth = Blueprint('web_auth', __name__)
 
 
 
-@web_auth.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template("web_login.html")
+@web_auth.route('/admin-login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method =='POST':
+        user_name = request.form.get('user_name')
+        password = request.form.get('password')
+
+        admin = User.query.filter_by(user_name=user_name, admin=1).first()
+        if not admin:
+            flash("No User found with this User-Name", category='error')
+        else:
+            if admin.password == password:
+
+                login_user(admin)
+
+                return render_template('admin_files/web_admin-dashboard.html')
+    return render_template("admin_files/web_admin-login.html")
+
+
+@web_auth.route('/user-login', methods=['GET', 'POST'])
+def user_login():
+    if request.method == 'POST':
+        user_name = request.form.get('user_name')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(user_name=user_name, admin=0).first()
+        if not user:
+            flash("No User found with this User-Name", category='error')
+        else:
+            if user.password == password:
+                login_user(user)
+
+                return render_template('user_files/web_user-dashboard.html')
+    return render_template("user_files/web_user-login.html")
+
 
 
 
@@ -25,12 +56,12 @@ def signup():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         # print(user_name, name)
-        user = User.query.filter_by(user_name=user_name).first()
+        user = User.query.filter_by(user_name=user_name, admin=0).first()
         # print(user)
 
         if user:
             flash("This user already exists. Log in", category='error')
-            redirect(url_for('web_auth.login'))
+            redirect(url_for('web_auth.user_login'))
 
         elif password != confirm_password:
             flash("Passwords don't match", category='error')
@@ -47,7 +78,14 @@ def signup():
             flash('Account Created!', category='success')
             login_user(new_user, remember=True)
 
-            return redirect(url_for('web_views.feed', user=current_user, user_name=new_user.user_name))
+            return redirect(url_for('web_views.home', user=current_user, admin=False))
 
-    return render_template('web_sign-up.html', user=current_user)
+    return render_template('web_sign-up.html')
+
+
+@web_auth.route('/log-out')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('web_views.home'))
 
