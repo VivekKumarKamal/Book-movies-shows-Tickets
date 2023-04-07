@@ -21,7 +21,7 @@ def create_app():
     login_manager.login_message = "Log in to access the page"
     login_manager.init_app(app)
 
-    from .web_models import User, Venue, Show, Tags, ShowTag
+    from .web_models import User, Venue, Show, Tags
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))

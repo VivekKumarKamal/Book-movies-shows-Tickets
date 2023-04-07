@@ -2,9 +2,91 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<div>
-    <h3>Hello</h3>
-</div>
+
+<section class="">
+
+  <div class="container-fluid px-0">
+    <div class="row g-0 text-center vh-100">
+
+      <div class=" bg-danger align-self-center">
+        <h3 align="center">The Show</h3>
+          <br>
+        <div class="container">
+        <form action="" method="POST">
+
+            <div class="input-group mb-3">
+                <label for="show_name" class="input-group-text">Show Name</label>
+                <input type="text"
+                class="form-control"
+                id="show_name"
+                name="show_name"
+                placeholder="Enter the name of this Show"
+
+                value="{{ show_name }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+
+            <div class="input-group mb-3">
+                <label for="rating" class="input-group-text">Rating</label>
+                <input type="number"
+                class="form-control"
+                id="rating"
+                name="rating"
+                placeholder="Enter the Rating out of 5"
+                value="{{ rating }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+            <div class="input-group mb-3">
+                <label for="tags" class="input-group-text">Tags</label>
+                <input type="text"
+                class="form-control"
+                id="tags"
+                name="tags"
+                placeholder="drama,thriller,romance"
+
+                value="{{ tags }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+            <div class="input-group mb-3">
+                <label for="start_time" class="input-group-text">Start time</label>
+                <input type="datetime-local"
+                class="form-control"
+                id="start_time"
+                name="start_time"
+                placeholder="Enter the start timing of show"
+                value="{{ start_time }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+            <div class="input-group mb-3">
+                <label for="end_time" class="input-group-text">End time</label>
+                <input type="datetime-local"
+                class="form-control"
+                id="end_time"
+                name="end_time"
+                placeholder="Enter the end timing of show"
+                value="{{ end_time }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+
+            <div class="input-group mb-3">
+                <label for="price" class="input-group-text">Ticket-Price</label>
+                <input type="number"
+                class="form-control"
+                id="price"
+                name="price"
+                placeholder="Enter the ticket price for this show"
+                value="{{ price }}" /><!--        Here I will take data from db if editing               -->
+            </div>
+
+            <br>
+            <button type="submit" class="btn btn-primary">Enter</button>
+        </form>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
 
 {% endblock %}

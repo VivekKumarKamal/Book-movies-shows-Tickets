@@ -3,16 +3,19 @@ from flask_login import login_user, login_manager, current_user
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 
-from .web_models import User, Venue, Show, ShowTag, Tags
+from .web_models import User, Venue, Show, Tags
+from .web_forms import ShowForm
+from datetime import datetime
+from datetime import datetime
+
 
 # -----------------------------Blueprint-----------------------------
 web_auth = Blueprint('web_auth', __name__)
 
 
-
 @web_auth.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
-    if request.method =='POST':
+    if request.method == 'POST':
         user_name = request.form.get('user_name')
         password = request.form.get('password')
 
@@ -42,8 +45,6 @@ def user_login():
 
                 return render_template('user_files/web_user-dashboard.html', user=user)
     return render_template("user_files/web_user-login.html")
-
-
 
 
 @web_auth.route('/sign-up', methods=['GET', 'POST'])
@@ -88,11 +89,10 @@ def logout():
     return redirect(url_for('web_views.home'))
 
 
-
-@web_auth.route('/manage-venue/<int:id>', methods=['GET', 'POST'])
+@web_auth.route('/manage-venue/<int:venue_id>', methods=['GET', 'POST'])
 @login_required
-def manage_venue(id):
-    venue = Venue.query.filter_by(id=id).first()
+def manage_venue(venue_id):
+    venue = Venue.query.filter_by(id=venue_id).first()
     if request.method == "GET":
         name = venue.name if venue else ""
         place = venue.place if venue else ""
@@ -112,9 +112,14 @@ def manage_venue(id):
         capacity = request.form.get('capacity')
 
         if not venue:
-                    new_venue = Venue(id=id, admin_id=current_user.id, name=venue_name, place=place, location=location, capacity=capacity)
-                    db.session.add(new_venue)
-                    db.session.commit()
+            new_venue = Venue(id=venue_id,
+                              admin_id=current_user.id,
+                              name=venue_name,
+                              place=place,
+                              location=location,
+                              capacity=capacity)
+            db.session.add(new_venue)
+            db.session.commit()
 
         else:
             venue.name = venue_name
@@ -125,3 +130,48 @@ def manage_venue(id):
             db.session.commit()
 
     return redirect(url_for('web_views.home'))
+
+
+@web_auth.route('/manage-show/<int:venue_id>/<int:show_id>', methods=['GET', 'POST'])
+@login_required
+def manage_show(venue_id, show_id):
+    show = Show.query.filter_by(id=show_id).first()
+    if request.method == "GET":
+        name = show.name if show else ""
+        rating = show.rating if show else ""
+        start_time = show.start_time if show else ""
+        end_time = show.end_time if show else ""
+        tags = show.tags if show else ""
+        ticket_price = show.ticket_price if show else ""
+
+        return render_template("admin_files/web_show-management.html",
+                               user=current_user,
+                               name=name,
+                               rating=rating,
+                               start_time=start_time,
+                               end_time=end_time,
+                               tags=tags,
+                               ticket_price=ticket_price)
+    else:
+        show_name = request.form.get('show_name')
+        rating = request.form.get('rating')
+        tags = list(request.form.get('tags').split(","))
+        start_time = request.form.get('start_time')
+        end_time = request.form.get('end_time')
+        price = request.form.get('price')
+
+        for tag in tags:
+            new_tag = Tags(tag=tag, show_id=show_id)
+            db.session.add(new_tag)
+            db.session.commit()
+
+        new_show = Show(id=show_id,
+                        venue_id=venue_id,
+                        name=show_name,
+                        rating=rating,
+                        start_time=datetime.strptime(start_time, '%Y-%m-%dT%H:%M'),
+                        end_time=datetime.strptime(end_time, '%Y-%m-%dT%H:%M'),
+                        ticket_price=price)
+        db.session.add(new_show)
+        db.session.commit()
+    return redirect(url_for('web_views.venue', venue_id=venue_id))

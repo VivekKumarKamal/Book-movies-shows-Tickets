@@ -6,8 +6,10 @@
 
 {% if user.venues %}
 {% for venue in user.venues %}
-{{ venue.name }}
-
+    <a href="/venue/{{ venue.id }}">
+        {{ venue.name }}
+    </a>
+    <br>
 {% endfor %}
 
 {% else %}

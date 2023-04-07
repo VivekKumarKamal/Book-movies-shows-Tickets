@@ -1,0 +1,24 @@
+{% extends "web_base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<h1>Venue {{ venue.id }}</h1>
+{% if not venue.shows %}
+    <p>No Shows yet on this venue.</p>
+
+{% else %}
+{% for show in venue.shows %}
+    <a href="/show/{{ show.id }}">
+        {{ show.name }}
+    </a>
+    <br>
+{% endfor %}
+{% endif %}
+
+<a href="/manage-show/{{ venue_id }}/{{ new_show_id }}">
+    <button>
+        &#43;
+    </button>
+</a>
+
+{% endblock %}

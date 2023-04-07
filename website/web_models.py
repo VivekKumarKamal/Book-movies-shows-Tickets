@@ -23,8 +23,9 @@ class Venue(db.Model):
     place = db.Column(db.String(35))
     location = db.Column(db.String(50))
     capacity = db.Column(db.Integer)
+    availability = db.Column(db.Integer, default=capacity)
 
-    shows = db.relationship('Show')
+    shows = db.relationship('Show', backref='venue', passive_deletes=True)
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Show(db.Model):
@@ -32,24 +33,19 @@ class Show(db.Model):
     name = db.Column(db.String(25))
     rating = db.Column(db.Float)
     ticket_price = db.Column(db.Integer)
-    start_time = db.Column(db.Integer)
-    end_time = db.Column(db.Integer)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
 
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id', ondelete="CASCADE"))
 
-    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
+    #This will look to ShowTag
+    tags = db.relationship('Tags', backref='show', passive_deletes=True)
 
-    tags = db.relationship('ShowTag')
 
 class Tags(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(25))
-
-    tag_id = db.relationship('ShowTag')
-
-class ShowTag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    show_id = db.Column(db.Integer, db.ForeignKey('show.id'))
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'))
+    tag = db.Column(db.String(25))
+    show_id = db.Column(db.Integer, db.ForeignKey('show.id', ondelete='CASCADE'))
 
 
 def init_db():
