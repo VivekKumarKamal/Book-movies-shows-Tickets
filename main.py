@@ -1,7 +1,10 @@
 from replit import web
 from website import create_app
+from website.web_models import Show
 
-app = create_app()
+
+app, api = create_app()
+
 
 
 

@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     admin = db.Column(db.Integer, default=0)
 
     venues = db.relationship('Venue')
+    bookings = db.relationship('Booking')
 
 
 
@@ -23,10 +24,19 @@ class Venue(db.Model):
     place = db.Column(db.String(35))
     location = db.Column(db.String(50))
     capacity = db.Column(db.Integer)
-    availability = db.Column(db.Integer, default=capacity)
 
     shows = db.relationship('Show', backref='venue', passive_deletes=True)
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'place': self.place,
+            'location': self.location,
+            'capacity': str(self.capacity)
+        }
+        return data
 
 class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,12 +44,31 @@ class Show(db.Model):
     rating = db.Column(db.Float)
     ticket_price = db.Column(db.Integer)
     start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    timing = db.Column(db.Integer)
 
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id', ondelete="CASCADE"))
+    availability = db.Column(db.Integer)
 
-    #This will look to ShowTag
     tags = db.relationship('Tags', backref='show', passive_deletes=True)
+    bookings = db.relationship('Booking', backref='show', passive_deletes=True)
+
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'rating': self.rating,
+            'ticket_price': self.ticket_price,
+            'start_time': str(self.start_time),
+            'duration': self.timing
+        }
+        return data
+class Booking(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    show_id = db.Column(db.Integer, db.ForeignKey('show.id', ondelete="CASCADE"))
 
 
 class Tags(db.Model):
