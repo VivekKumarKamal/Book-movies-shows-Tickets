@@ -1,24 +1,172 @@
 {% extends "web_base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-
-<h1>Venue {{ venue.id }}</h1>
+<br>
+<h1 align="center">Venue: {{ venue.name }}</h1>
+<br>
+{% if user.admin %}
+    <div align="center">
+    <a href="/manage-show/{{ venue_id }}/{{ new_show_id }}">
+        <button class="btn btn-primary">
+            Create Show &#43;
+        </button>
+    </a>
+    </div>
+<br>
+{% endif %}
 {% if not venue.shows %}
     <p>No Shows yet on this venue.</p>
 
 {% else %}
+
 {% for show in venue.shows %}
-    <a href="/show/{{ show.id }}">
-        {{ show.name }}
+
+<div class="rectangle">
+    <p class="date_venue">
+        <a href="/venue/{{ show.venue.id }}">
+            <span class="venue"><b>{{ show.venue.name }}</b></span>
+        </a>
+      <span class="date">{{ calendar.month_abbr[ show.start_time.month ] }} {{ show.start_time.day }}</span>
+      <span>{{ show.start_time.year }}</span>
+    </p>
+
+    {% if not user.admin %}
+    <a href="/book-show/{{ show.id }}">
+      <div class="show-name">
+        <h1><b>{{ show.name }}</b></h1>
+      </div>
     </a>
-    <br>
+    {% else %}
+
+      <div class="show-name">
+        <h1><b>{{ show.name }}</b></h1>
+      </div>
+
+    {% endif %}
+    {% for tag in show.tags %}
+        {{ tag.tag }}
+    {% endfor %}
+
+    <div class="timing">
+      <p>{{ show.start_time.hour }}:{{ show.start_time.minute }}<span> TO</span> {{ show.start_time.hour|int + show.timing }}:{{ show.start_time.minute }}</p>
+    </div>
+
+    <p class="address">
+        <span><b>Place: </b>{{ show.venue.place }}</span>
+        <span><b>Address: </b>{{ show.venue.location }}</span>
+    </p>
+
+    <p class="tickets">
+        {% if show.availability > 0 %}
+            <span><b>Available-Seats: </b>{{ show.availability }}</span>
+        {% else %}
+            <p>Houseful</p>
+        {% endif %}
+    </p>
+    {% if user.admin %}
+    <div align="center">
+        <a href="/manage-show/{{ show.venue.id }}/{{ show.id }}">
+            <button class="btn btn-primary">
+                Edit Show
+            </button>
+        </a>
+
+        <a type="button" class="btn btn-danger" onClick="deleteShow({{ show.id }})">
+                Delete Show
+        </a>
+    </div>
+
+    {% else %}
+    <a href="/book-show/{{ show.id }}">
+      <button class="btn btn-primary">
+            Book Ticket
+        </button>
+    </a>
+<br>
+{% endif %}
+  </div>
+
+<br>
+
+
+
 {% endfor %}
 {% endif %}
 
-<a href="/manage-show/{{ venue_id }}/{{ new_show_id }}">
-    <button>
-        &#43;
-    </button>
-</a>
+
+<style>
+
+.rectangle{
+  background: #D9D9D9;
+  border-radius: 20px;
+  display: flex;
+	flex-direction: column;
+	text-align: center;
+	align-items: center;
+}
+
+.date_venue{
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 23px;
+}
+.date_venue span {
+	width: 110px;
+}
+.date_venue span:first-child {
+	text-align: left;
+}
+
+.date_venue span:last-child {
+	text-align: right;
+}
+
+.date{
+  color: #d63163;
+}
+
+.show-name {
+	font-size: 22px;
+	font-family: "Nanum Pen Script", cursive;
+	color: #4a437e;
+}
+
+.timing {
+	color: #4a437e;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	font-weight: 700;
+}
+
+.timing span {
+	font-weight: 400;
+	color: gray;
+}
+
+.left .timing {
+	font-size: 16px;
+}
+
+.address {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+}
+
+
+</style>
+
+
+
+
+
 
 {% endblock %}

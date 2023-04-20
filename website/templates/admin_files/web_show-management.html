@@ -8,7 +8,7 @@
   <div class="container-fluid px-0">
     <div class="row g-0 text-center vh-100">
 
-      <div class=" bg-danger align-self-center">
+      <div class=" align-self-center">
         <h3 align="center">The Show</h3>
           <br>
         <div class="container">
@@ -22,7 +22,7 @@
                 name="show_name"
                 placeholder="Enter the name of this Show"
 
-                value="{{ show_name }}" /><!--        Here I will take data from db if editing               -->
+                value="{{ name }}" /><!--        Here I will take data from db if editing               -->
             </div>
 
 
@@ -58,13 +58,13 @@
             </div>
 
             <div class="input-group mb-3">
-                <label for="end_time" class="input-group-text">End time</label>
-                <input type="datetime-local"
+                <label for="timing" class="input-group-text">Timing</label>
+                <input type="number"
                 class="form-control"
-                id="end_time"
-                name="end_time"
-                placeholder="Enter the end timing of show"
-                value="{{ end_time }}" /><!--        Here I will take data from db if editing               -->
+                id="timing"
+                name="timing"
+                placeholder="Enter the duration of show"
+                value="{{ timing }}" /><!--        Here I will take data from db if editing               -->
             </div>
 
 

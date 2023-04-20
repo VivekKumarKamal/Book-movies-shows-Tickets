@@ -1,58 +1,37 @@
 {% extends "web_base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Bookings{% endblock %}
 {% block content %}
-
 <br>
-<br>
-{% if shows %}
-<h3 align="center">Search Results for "{{ searched }}"</h3>
-{% for show in shows %}
-
+{% for booking in user.bookings %}
 <div class="rectangle">
     <p class="date_venue">
-        <a href="/venue/{{ show.venue.id }}">
-            <span class="venue"><b>{{ show.venue.name }}</b></span>
-        </a>
-      <span class="date">{{ calendar.month_abbr[ show.start_time.month ] }} {{ show.start_time.day }}</span>
-      <span>{{ show.start_time.year }}</span>
+        <span class="venue"><b>{{ booking.show.venue.name }}</b></span>
+      <span class="date">{{ calendar.month_abbr[ booking.show.start_time.month ] }} {{ booking.show.start_time.day }}</span>
+      <span>{{ booking.show.start_time.year }}</span>
     </p>
 
-    <a href="/book-show/{{ show.id }}">
-        <div class="show-name">
-      <h1><b>{{ show.name }}</b></h1>
+    <div class="show-name">
+      <h1><b>{{ booking.show.name }}</b></h1>
     </div>
-    </a>
-    {% for tag in show.tags %}
-        {{ tag.tag }}
-    {% endfor %}
 
     <div class="timing">
-      <p>{{ show.start_time.hour }}:{{ show.start_time.minute }}<span> TO</span> {{ show.start_time.hour }}:{{ show.start_time.minute }}</p>
+      <p>{{ booking.show.start_time.hour }}:{{ booking.show.start_time.minute }}<span> TO</span> {{ booking.show.start_time.hour|int + booking.show.timing}}:{{ booking.show.start_time.minute }}</p>
     </div>
 
     <p class="address">
-        <span><b>Place: </b>{{ show.venue.place }}</span>
-        <span><b>Address: </b>{{ show.venue.location }}</span>
+        <span><b>Place: </b>{{ booking.show.venue.place }}</span>
+        <span><b>Address: </b>{{ booking.show.venue.location }}</span>
     </p>
 
-    <p class="tickets">
-        {% if show.availability > 0 %}
-            <span><b>Available-Seats: </b>{{ show.availability }}</span>
-        {% else %}
-            <p>Houseful</p>
-        {% endif %}
-
+    <p class="ticket_id">
+        <span><b>Ticket-No: </b>#{{ booking.id }}</span>
+        <span><b>Seats: </b>{{ booking.number }}</span>
     </p>
   </div>
 
 <br>
-
-
-
 {% endfor %}
-{% else %}
-    <h4>Not Found!!</h4>
-{% endif %}
+
 <style>
 
 .rectangle{
@@ -122,7 +101,4 @@
 
 
 </style>
-
-
-
 {% endblock %}
