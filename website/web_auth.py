@@ -58,11 +58,11 @@ def signup():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         # print(user_name, name)
-        user = User.query.filter_by(user_name=user_name, admin=0).first()
+        user = User.query.filter_by(user_name=user_name).first()
         # print(user)
 
         if user:
-            flash("This user already exists. Log in", category='error')
+            flash("This user_name already exists. Log in or use a different user_name", category='error')
             redirect(url_for('web_auth.user_login'))
 
         elif password != confirm_password:
@@ -72,8 +72,8 @@ def signup():
             flash("Password is too short, should be greater than 7 characters", category='error')
 
         else:
-            # new_user = User(user_name=user_name, name=name, password=generate_password_hash(password, method='sha256'))
-            new_user = User(user_name=user_name, name=name, password=password)
+            new_user = User(user_name=user_name, name=name, password=generate_password_hash(password, method='sha256'))
+            # new_user = User(user_name=user_name, name=name, password=password)
             db.session.add(new_user)
             db.session.commit()
 
